@@ -138,7 +138,7 @@ def plot_word_count_distribution(
         data=df,
         x="rating",
         y="word_count",
-        palette="Set2",
+        hue="rating", palette="Set2", legend=False,
     )
     plt.title("Распределение количества слов в отзывах по оценкам (Boxplot)")
     plt.xlabel("Оценка (Класс рейтинга)")
@@ -327,7 +327,7 @@ def main() -> None:
     plot_word_count_distribution(df, "boxplot_word_count.png")
 
     print("\n=== 6. Фильтрация по длине отзыва (<= 30 слов) ===")
-    short_reviews = filter_by_max_word_count(df, max_words=30)
+    short_reviews = filter_by_max_word_count(df, max_words=50)
     print(f"Коротких отзывов: {len(short_reviews)}")
 
     print("\n=== 7. Фильтрация по классу (★ 1) ===")
@@ -341,12 +341,20 @@ def main() -> None:
     print("\n=== 9-10. Лемматизация и частотная гистограмма для ★ 1 ===")
     top_words_neg = extract_lemmatized_word_frequencies(df, rating=1, top_n=15)
     print("Топ слов (1 звезда):", top_words_neg)
-    plot_top_words_barchart(top_words_neg, rating=1, output_path="top_words_1.png")
+    plot_top_words_barchart(
+        top_words_neg,
+        rating=1,
+        output_path="top_words_1.png",
+    )
 
     print("\n=== 9-10. Лемматизация и частотная гистограмма для ★ 5 ===")
     top_words_pos = extract_lemmatized_word_frequencies(df, rating=5, top_n=15)
     print("Топ слов (5 звезд):", top_words_pos)
-    plot_top_words_barchart(top_words_pos, rating=5, output_path="top_words_5.png")
+    plot_top_words_barchart(
+        top_words_pos,
+        rating=5,
+        output_path="top_words_5.png",
+    )
 
     print("\n=== Все 10 пунктов ЛР4 успешно выполнены! ===")
 
