@@ -5,7 +5,7 @@ import json
 
 
 def create_lab4_notebook() -> None:
-    """Формирует и валидирует lab4_notebook.ipynb."""
+    """Формирует и валидирует lab4_notebook.ipynb с автоустановкой пакетов."""
     cells = [
         {
             "cell_type": "markdown",
@@ -39,16 +39,25 @@ def create_lab4_notebook() -> None:
             "outputs": [],
             "source": [
                 "import os\n",
+                "import sys\n",
+                "import subprocess\n",
                 "from collections import Counter\n",
                 "from pathlib import Path\n",
                 "import re\n",
                 "from typing import Dict, List, Tuple\n",
                 "\n",
+                "# Автоматическая установка pymorphy3 в среде Google Colab при ее отсутствии\n",
+                "try:\n",
+                "    import pymorphy3\n",
+                "except ImportError:\n",
+                "    print('Установка pymorphy3 в Google Colab...')\n",
+                "    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', 'pymorphy3'])\n",
+                "    import pymorphy3\n",
+                "\n",
                 "import matplotlib.pyplot as plt\n",
                 "import nltk\n",
                 "from nltk.corpus import stopwords\n",
                 "import pandas as pd\n",
-                "import pymorphy3\n",
                 "import seaborn as sns\n",
                 "\n",
                 "# Автозагрузка данных в среде Google Colab\n",
@@ -67,7 +76,7 @@ def create_lab4_notebook() -> None:
                 "    stop_words = set(stopwords.words('russian'))\n",
                 "\n",
                 "morph = pymorphy3.MorphAnalyzer()\n",
-                "print('Окружение готово к анализу!')"
+                "print('Окружение полностью готово к анализу!')"
             ]
         },
         {
@@ -313,7 +322,6 @@ def create_lab4_notebook() -> None:
         }
     ]
 
-    # Валидация синтаксиса каждой ячейки
     for idx, cell in enumerate(cells):
         if cell["cell_type"] == "code":
             raw_code = "".join(cell["source"])
@@ -329,7 +337,7 @@ def create_lab4_notebook() -> None:
     with open("lab4_notebook.ipynb", "w", encoding="utf-8") as f_out:
         json.dump(notebook_data, f_out, ensure_ascii=False, indent=1)
 
-    print("Ноутбук lab4_notebook.ipynb успешно создан и проверен AST-валидатором!")
+    print("Ноутбук lab4_notebook.ipynb успешно обновлен!")
 
 
 if __name__ == "__main__":
